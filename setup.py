@@ -27,11 +27,11 @@ classifiers = [
 ]
 
 setup(
-    name="libopenzwave-cffi",
+    name="libopenzwave",
     packages=find_packages(),
     setup_requires=["vcversioner", cffi_requirement],
-    cffi_modules=["libopenzwave_cffi/build.py:ffi"],
-    vcversioner={"version_module_paths": ["libopenzwave_cffi/_version.py"]},
+    cffi_modules=["libopenzwave/build.py:ffi"],
+    vcversioner={"version_module_paths": ["libopenzwave/_version.py"]},
     author="Julian Berman",
     author_email="Julian@GrayVines.com",
     classifiers=classifiers,
