@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 setup(
-    name="libopenzwave",
+    name="libopenzwave-cffi",
     packages=find_packages(),
     setup_requires=["vcversioner", cffi_requirement],
     cffi_modules=["libopenzwave/build.py:ffi"],
