@@ -1,1 +1,1 @@
-from libopenzwave_cffi._version import __version__
+from libopenzwave._version import __version__
