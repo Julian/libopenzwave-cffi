@@ -15,10 +15,11 @@ ffi.cdef(
     typedef void* CNotification;
     typedef void* COptions;
 
-    typedef void (*pfnOnNotification_t)(CNotification const* _pNotification, void* _context);
+    typedef void (*cPfnOnNotification_t)(CNotification const*, void*);
 
     CManager newCManager(void);
-    bool CManagerAddWatcher(CManager, pfnOnNotification_t notification, void* context);
+    bool CManagerAddWatcher(CManager, cPfnOnNotification_t, void*);
+    extern "Python" void add_manager_callback(CManager, cPfnOnNotification_t*, void*);
 
     COptions newCOptions(const char*, const char*, const char*);
     bool COptionsAddString(COptions, const char*, const char*, bool);
@@ -28,4 +29,12 @@ ffi.cdef(
     bool COptionsAreLocked(COptions);
     """
 )
+
+
+@ffi.def_extern()
+def add_watcher_callback(context):
+    callback = ffi.from_handle(context)
+    callback()
+
+
 ffi.compile()
