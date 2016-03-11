@@ -3,6 +3,8 @@
 
 #include "libopenzwavec.h"
 
+#include "openzwave/Manager.h"
+#include "openzwave/Notification.h"
 #include "openzwave/Options.h"
 
 
@@ -11,11 +13,19 @@ int main() {}
 
 extern "C"
 {
+    CManager newCManager(void) {
+        return reinterpret_cast<void*>(OpenZWave::Manager::Create());
+    }
+
+    bool CManagerAddWatcher(CManager cManager, cPfnOnNotification_t cNotification, void* context) {
+        return static_cast<OpenZWave::Manager*>(cManager)->AddWatcher(
+                reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(cNotification), context);
+    }
+
     COptions newCOptions(
             const char *cConfigPath,
             const char *cUserPath,
-            const char *cCommandLine
-            )
+            const char *cCommandLine)
     {
         std::string configPath = cConfigPath;
         std::string userPath = cUserPath;
