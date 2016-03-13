@@ -27,5 +27,4 @@ ffi.cdef(
     """
 )
 
-
 ffi.compile()
