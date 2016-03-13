@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "openzwave/Driver.h"
 #include "openzwave/Manager.h"
 #include "openzwave/Notification.h"
 
@@ -11,11 +12,19 @@ extern "C" {
 
     typedef void* pfnOnNotification_t;
     typedef OpenZWave::Notification::NotificationType NotificationType;
+    typedef OpenZWave::Driver::DriverData DriverData;
 
     CManager newCManager(void);
     void destroyCManager(CManager);
 
+    const char* CManagerGetVersionAsString(void);
+
     bool CManagerIsBridgeController(CManager, uint32_t);
+    bool CManagerIsNodeBeamingDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeFrequentListeningDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeListeningDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeRoutingDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeSecurityDevice(CManager, uint32_t const, uint8_t);
     bool CManagerIsPrimaryController(CManager, uint32_t);
     bool CManagerIsStaticUpdateController(CManager, uint32_t);
     bool CManagerCancelControllerCommand(CManager, uint32_t const);
@@ -28,6 +37,7 @@ extern "C" {
 
     const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
     const char* CManagerGetLibraryVersion(CManager, uint32_t const);
+    uint8_t CManagerGetNodeVersion(CManager, uint32_t const, uint8_t);
     int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
 
     const char* CManagerGetNodeName(CManager, uint32_t const, uint8_t const);

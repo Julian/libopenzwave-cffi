@@ -20,7 +20,14 @@ ffi.cdef(
     CManager newCManager(void);
     void destroyCManager(CManager);
 
+    const char* CManagerGetVersionAsString(void);
+
     bool CManagerIsBridgeController(CManager, uint32_t);
+    bool CManagerIsNodeBeamingDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeFrequentListeningDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeListeningDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeRoutingDevice(CManager, uint32_t const, uint8_t);
+    bool CManagerIsNodeSecurityDevice(CManager, uint32_t const, uint8_t);
     bool CManagerIsPrimaryController(CManager, uint32_t);
     bool CManagerIsStaticUpdateController(CManager, uint32_t);
     bool CManagerCancelControllerCommand(CManager, uint32_t const);
@@ -33,6 +40,7 @@ ffi.cdef(
 
     const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
     const char* CManagerGetLibraryVersion(CManager, uint32_t const);
+    uint8_t CManagerGetNodeVersion(CManager, uint32_t const, uint8_t);
     int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
 
     const char* CManagerGetNodeName(CManager, uint32_t const, uint8_t const);

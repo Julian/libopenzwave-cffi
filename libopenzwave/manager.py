@@ -1,5 +1,6 @@
 from _libopenzwave import ffi, lib
 
+from libopenzwave import __version__
 from libopenzwave._global import PyNotifications
 
 
@@ -33,6 +34,21 @@ class PyManager(object):
     def isBridgeController(self, homeId):
         return lib.CManagerIsBridgeController(self.manager, homeId)
 
+    def isNodeFrequentListeningDevice(self, homeId, nodeId):
+        return lib.CManagerIsNodeFrequentListeningDevice(self.manager, homeId, nodeId)
+
+    def isNodeBeamingDevice(self, homeId, nodeId):
+        return lib.CManagerIsNodeBeamingDevice(self.manager, homeId, nodeId)
+
+    def isNodeListeningDevice(self, homeId, nodeId):
+        return lib.CManagerIsNodeListeningDevice(self.manager, homeId, nodeId)
+
+    def isNodeRoutingDevice(self, homeId, nodeId):
+        return lib.CManagerIsNodeRoutingDevice(self.manager, homeId, nodeId)
+
+    def isNodeSecurityDevice(self, homeId, nodeId):
+        return lib.CManagerIsNodeSecurityDevice(self.manager, homeId, nodeId)
+
     def isPrimaryController(self, homeId):
         return lib.CManagerIsPrimaryController(self.manager, homeId)
 
@@ -48,11 +64,30 @@ class PyManager(object):
     def cancelControllerCommand(self, homeId):
         return lib.CManagerCancelControllerCommand(self.manager, homeId)
 
+    def getDriverStatistics(self, homeId):
+        data = ffi.new("struct DriverData*")
+        statistics = lib.CManagerGetDriverStatistics(homeId, data)
+        return statistics
+
     def getLibraryTypeName(self, homeId):
         return ffi.string(lib.CManagerGetLibraryTypeName(self.manager, homeId))
 
     def getLibraryVersion(self, homeId):
         return ffi.string(lib.CManagerGetLibraryVersion(self.manager, homeId))
+
+    def getNodeVersion(self, homeId, nodeId):
+        return int(lib.CManagerGetNodeVersion(self.manager, homeId, nodeId))
+
+    def getPythonLibraryVersion(self):
+        version = self.getPythonLibraryVersionNumber()
+        return "python-openzwave+cffi v%s" % (version,)
+
+    def getPythonLibraryVersionNumber(self):
+        return __version__
+
+    @classmethod
+    def getOzwLibraryVersion(cls):
+        return ffi.string(lib.CManagerGetVersionAsString())
 
     def getSendQueueCount(self, homeId):
         return lib.CManagerGetSendQueueCount(self.manager, homeId)

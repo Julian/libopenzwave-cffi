@@ -21,8 +21,32 @@ extern "C"
         static_cast<OpenZWave::Manager*>(cManager)->Destroy();
     }
 
+    const char* CManagerGetVersionAsString(void) {
+        return OpenZWave::Manager::getVersionAsString().c_str();
+    }
+
     bool CManagerIsBridgeController(CManager cManager, uint32_t const homeId) {
         return static_cast<OpenZWave::Manager*>(cManager)->IsBridgeController(homeId);
+    }
+
+    bool CManagerIsNodeFrequentListeningDevice(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsNodeFrequentListeningDevice(homeId, nodeId);
+    }
+
+    bool CManagerIsNodeBeamingDevice(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsNodeBeamingDevice(homeId, nodeId);
+    }
+
+    bool CManagerIsNodeListeningDevice(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsNodeListeningDevice(homeId, nodeId);
+    }
+
+    bool CManagerIsNodeRoutingDevice(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsNodeRoutingDevice(homeId, nodeId);
+    }
+
+    bool CManagerIsNodeSecurityDevice(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsNodeSecurityDevice(homeId, nodeId);
     }
 
     bool CManagerIsPrimaryController(CManager cManager, uint32_t const homeId) {
@@ -63,6 +87,10 @@ extern "C"
 
     const char* CManagerGetLibraryVersion(CManager cManager, uint32_t const homeId) {
         return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryVersion(homeId).c_str();
+    }
+
+    uint8_t CManagerGetNodeVersion(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNodeVersion(homeId, nodeId);
     }
 
     int32_t CManagerGetSendQueueCount(CManager cManager, uint32_t const homeId) {
