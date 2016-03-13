@@ -30,6 +30,15 @@ class PyManager(object):
         finally:
             self._watcherCallbackSavedReference = None
 
+    def isBridgeController(self, homeId):
+        return lib.CManagerIsBridgeController(self.manager, homeId)
+
+    def isPrimaryController(self, homeId):
+        return lib.CManagerIsPrimaryController(self.manager, homeId)
+
+    def isStaticUpdateController(self, homeId):
+        return lib.CManagerIsStaticUpdateController(self.manager, homeId)
+
     def addDriver(self, controllerPath):
         return lib.CManagerAddDriver(self.manager, controllerPath)
 
@@ -48,11 +57,29 @@ class PyManager(object):
     def getSendQueueCount(self, homeId):
         return lib.CManagerGetSendQueueCount(self.manager, homeId)
 
+    def getNodeName(self, homeId, nodeId):
+        return ffi.string(
+            lib.CManagerGetNodeName(self.manager, homeId, nodeId),
+        )
+
     def setNodeName(self, homeId, nodeId, nodeName):
         lib.CManagerSetNodeName(self.manager, homeId, nodeId, nodeName)
 
+    def getNodeLocation(self, homeId, nodeId):
+        return lib.CManagerSetNodeLocation(self.manager, homeId, nodeId)
+
     def setNodeLocation(self, homeId, nodeId, nodeLocation):
         lib.CManagerSetNodeLocation(self.manager, homeId, nodeId, nodeLocation)
+
+    def getNodeProductName(self, homeId, nodeId):
+        return ffi.string(
+            lib.CManagerGetNodeProductName(self.manager, homeId, nodeId),
+        )
+
+    def setNodeProductName(self, homeId, nodeId, nodeProductName):
+        lib.CManagerSetNodeProductName(
+            self.manager, homeId, nodeId, nodeProductName,
+        )
 
     def writeConfig(self, homeId):
         lib.CManagerWriteConfig(self.manager, homeId)

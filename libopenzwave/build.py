@@ -19,17 +19,33 @@ ffi.cdef(
 
     CManager newCManager(void);
     void destroyCManager(CManager);
+
+    bool CManagerIsBridgeController(CManager, uint32_t);
+    bool CManagerIsPrimaryController(CManager, uint32_t);
+    bool CManagerIsStaticUpdateController(CManager, uint32_t);
+    bool CManagerCancelControllerCommand(CManager, uint32_t const);
+
     bool CManagerAddWatcher(CManager, pfnOnNotification_t, void* context);
     bool CManagerRemoveWatcher(CManager, pfnOnNotification_t, void* context);
+
     bool CManagerAddDriver(CManager, const char*);
     bool CManagerRemoveDriver(CManager, const char*);
-    bool CManagerCancelControllerCommand(CManager, uint32_t const);
-    const char* CManagerGetLibraryTypeName(CManager, uint32_t);
-    const char* CManagerGetLibraryVersion(CManager, uint32_t);
+
+    const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
+    const char* CManagerGetLibraryVersion(CManager, uint32_t const);
     int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
-    void CManagerSetNodeName(CManager, uint32_t, uint8_t, const char*);
-    void CManagerSetNodeLocation(CManager, uint32_t, uint8_t, const char*);
+
+    const char* CManagerGetNodeName(CManager, uint32_t const, uint8_t const);
+    void CManagerSetNodeName(CManager, uint32_t const, uint8_t const, const char*);
+
+    const char* CManagerGetNodeLocation(CManager, uint32_t const, uint8_t const);
+    void CManagerSetNodeLocation(CManager, uint32_t const, uint8_t const, const char*);
+
+    const char* CManagerGetNodeProductName(CManager, uint32_t const, uint8_t const);
+    void CManagerSetNodeProductName(CManager, uint32_t const, uint8_t const, const char*);
+
     void CManagerWriteConfig(CManager, uint32_t const);
+
     extern "Python" void do_manager_watcher_callback(CManager, void* pythonFn);
 
     NotificationType CNotificationGetType(CNotification);

@@ -350,6 +350,22 @@ class EnumWithDoc(str):
         self.doc = doc
         return self
 
+
+PyControllerState = [
+    EnumWithDoc('Normal').setDoc("No command in progress."),
+    EnumWithDoc('Starting').setDoc("The command is starting."),
+    EnumWithDoc('Cancel').setDoc("The command was cancelled."),
+    EnumWithDoc('Error').setDoc("Command invocation had error(s) and was aborted."),
+    EnumWithDoc('Waiting').setDoc("Controller is waiting for a user action."),
+    EnumWithDoc('Sleeping').setDoc("Controller command is on a sleep queue wait for device."),
+    EnumWithDoc('InProgress').setDoc("The controller is communicating with the other device to carry out the command."),
+    EnumWithDoc('Completed').setDoc("The command has completed successfully."),
+    EnumWithDoc('Failed').setDoc("The command has failed."),
+    EnumWithDoc('NodeOK').setDoc("Used only with ControllerCommand_HasNodeFailed to indicate that the controller thinks the node is OK."),
+    EnumWithDoc('NodeFailed').setDoc("Used only with ControllerCommand_HasNodeFailed to indicate that the controller thinks the node has failed."),
+    ]
+
+
 PyNotifications = [
     EnumWithDoc('ValueAdded').setDoc("A new node value has been added to OpenZWave's set. These notifications occur after a node has been discovered, and details of its command classes have been received.  Each command class may generate one or more values depending on the complexity of the item being represented."),
     EnumWithDoc('ValueRemoved').setDoc("A node value has been removed from OpenZWave's set.  This only occurs when a node is removed."),

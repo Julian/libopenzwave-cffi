@@ -21,6 +21,18 @@ extern "C"
         static_cast<OpenZWave::Manager*>(cManager)->Destroy();
     }
 
+    bool CManagerIsBridgeController(CManager cManager, uint32_t const homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsBridgeController(homeId);
+    }
+
+    bool CManagerIsPrimaryController(CManager cManager, uint32_t const homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsPrimaryController(homeId);
+    }
+
+    bool CManagerIsStaticUpdateController(CManager cManager, uint32_t const homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->IsStaticUpdateController(homeId);
+    }
+
     bool CManagerAddWatcher(CManager cManager, pfnOnNotification_t notification, void* context) {
         return static_cast<OpenZWave::Manager*>(cManager)->AddWatcher(
                 reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
@@ -57,9 +69,26 @@ extern "C"
         return static_cast<OpenZWave::Manager*>(cManager)->GetSendQueueCount(homeId);
     }
 
+    const char* CManagerGetNodeName(CManager cManager, uint32_t const homeId, uint8_t const nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNodeName(homeId, nodeId).c_str();
+    }
+
     void CManagerSetNodeName(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeName) {
         std::string nodeName = cNodeName;
         static_cast<OpenZWave::Manager*>(cManager)->SetNodeName(homeId, nodeId, nodeName);
+    }
+
+    const char* CManagerGetNodeProductName(CManager cManager, uint32_t const homeId, uint8_t const nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNodeProductName(homeId, nodeId).c_str();
+    }
+
+    void CManagerSetNodeProductName(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeProductName) {
+        std::string nodeProductName = cNodeProductName;
+        static_cast<OpenZWave::Manager*>(cManager)->SetNodeProductName(homeId, nodeId, nodeProductName);
+    }
+
+    const char* CManagerGetNodeLocation(CManager cManager, uint32_t const homeId, uint8_t const nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNodeLocation(homeId, nodeId).c_str();
     }
 
     void CManagerSetNodeLocation(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeLocation) {
