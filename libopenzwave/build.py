@@ -11,11 +11,18 @@ ffi.cdef(
     typedef void* CNotification;
     typedef void* COptions;
 
+    typedef void* pfnOnNotification_t;
+    typedef void* NotificationType;
+
     CManager newCManager(void);
     void destroyCManager(CManager);
-    bool CManagerAddWatcher(CManager, ...);
-    extern "Python" void manager_watcher_callback(CManager, void*, void*);
+    bool CManagerAddWatcher(CManager, pfnOnNotification_t, void* context);
     bool CManagerAddDriver(CManager, const char*);
+    extern "Python" void do_manager_watcher_callback(CManager, void* pythonFn);
+
+    NotificationType CNotificationGetType(CNotification);
+    uint32_t CNotificationGetHomeId(CNotification);
+    uint8_t CNotificationGetNodeId(CNotification);
 
     COptions newCOptions(const char*, const char*, const char*);
     void destroyCOptions(COptions);

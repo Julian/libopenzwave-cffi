@@ -1,5 +1,7 @@
 from _libopenzwave import ffi, lib
 
+from libopenzwave._global import PyNotifications
+
 
 class PyManager(object):
     def create(self):
@@ -10,7 +12,7 @@ class PyManager(object):
         self._watcherCallbackSavedReference = context
         if not lib.CManagerAddWatcher(
             self.manager,
-            lib.manager_watcher_callback,
+            lib.do_manager_watcher_callback,
             context,
         ):
             assert False
@@ -20,6 +22,16 @@ class PyManager(object):
 
 
 @ffi.def_extern()
-def manager_watcher_callback(notification, context, _):
+def do_manager_watcher_callback(cNotification, context):
     callback = ffi.from_handle(context)
-    callback(notification)
+    notification_type_value = int(
+        ffi.cast("int", lib.CNotificationGetType(cNotification))
+    )
+    notification_type = PyNotifications[notification_type_value]
+    callback(
+        {
+            "notificationType" : notification_type,
+            "homeId" : lib.CNotificationGetHomeId(cNotification),
+            "nodeId" : lib.CNotificationGetNodeId(cNotification),
+        },
+    )

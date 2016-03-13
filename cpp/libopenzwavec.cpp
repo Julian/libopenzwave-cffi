@@ -21,7 +21,7 @@ extern "C"
         static_cast<OpenZWave::Manager*>(cManager)->Destroy();
     }
 
-    bool CManagerAddWatcher(CManager cManager, void* notification, void* context) {
+    bool CManagerAddWatcher(CManager cManager, pfnOnNotification_t notification, void* context) {
         return static_cast<OpenZWave::Manager*>(cManager)->AddWatcher(
                 reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
     }
@@ -29,6 +29,18 @@ extern "C"
     bool CManagerAddDriver(CManager cManager, const char* cControllerPath) {
         std::string controllerPath = cControllerPath;
         return static_cast<OpenZWave::Manager*>(cManager)->AddDriver(controllerPath);
+    }
+
+    NotificationType CNotificationGetType(CNotification cNotification) {
+        return static_cast<OpenZWave::Notification*>(cNotification)->GetType();
+    }
+
+    uint32 CNotificationGetHomeId(CNotification cNotification) {
+        return static_cast<OpenZWave::Notification*>(cNotification)->GetHomeId();
+    }
+
+    uint8 CNotificationGetNodeId(CNotification cNotification) {
+        return static_cast<OpenZWave::Notification*>(cNotification)->GetNodeId();
     }
 
     COptions newCOptions(
