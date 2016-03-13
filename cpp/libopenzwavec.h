@@ -12,10 +12,12 @@ extern "C" {
     typedef void* cpfnOnNotification_t;
 
     CManager newCManager(void);
+    void destroyCManager(CManager);
     bool CManagerAddWatcher(CManager, cpfnOnNotification_t, void*);
     bool CManagerAddDriver(CManager, const char*);
 
     COptions newCOptions(const char*, const char*, const char*);
+    void destroyCOptions(COptions);
     bool COptionsAddString(COptions, const char*, const char*, bool);
     bool COptionsAddBool(COptions, const char*, bool);
     bool COptionsAddInt(COptions, const char*, int32_t);

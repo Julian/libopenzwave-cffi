@@ -17,6 +17,10 @@ extern "C"
         return reinterpret_cast<void*>(OpenZWave::Manager::Create());
     }
 
+    void destroyCManager(CManager cManager) {
+        static_cast<OpenZWave::Manager*>(cManager)->Destroy();
+    }
+
     bool CManagerAddWatcher(CManager cManager, void* notification, void* context) {
         return static_cast<OpenZWave::Manager*>(cManager)->AddWatcher(
                 reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
@@ -37,6 +41,10 @@ extern "C"
         std::string commandLine = cCommandLine;
         return reinterpret_cast<void*>(
                 OpenZWave::Options::Create(configPath, userPath, commandLine));
+    }
+
+    void destroyCOptions(COptions cOptions) {
+        static_cast<OpenZWave::Options*>(cOptions)->Destroy();
     }
 
     bool COptionsAddBool(COptions cOptions, const char *cName, bool value)

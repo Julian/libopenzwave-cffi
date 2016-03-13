@@ -3,7 +3,7 @@ from _libopenzwave import ffi, lib
 
 class PyManager(object):
     def create(self):
-        self.manager = lib.newCManager()
+        self.manager = ffi.gc(lib.newCManager(), lib.destroyCManager)
 
     def addWatcher(self, callback):
         context = ffi.new_handle(callback)

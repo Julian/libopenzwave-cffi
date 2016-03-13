@@ -1,4 +1,4 @@
-from _libopenzwave import lib
+from _libopenzwave import ffi, lib
 
 
 class PyOptions(object):
@@ -9,9 +9,11 @@ class PyOptions(object):
         self.create()
 
     def create(self):
-        self.options = lib.newCOptions(
+        cOptions = lib.newCOptions(
             self._config_path, self._user_path, self._cmd_line,
         )
+        assert cOptions
+        self.options = ffi.gc(cOptions, lib.destroyCOptions)
         return True
 
     def addOptionBool(self, name, value):
