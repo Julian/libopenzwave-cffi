@@ -15,12 +15,16 @@ extern "C" {
     CManager newCManager(void);
     void destroyCManager(CManager);
     bool CManagerAddWatcher(CManager, pfnOnNotification_t, void* context);
+    bool CManagerRemoveWatcher(CManager, pfnOnNotification_t, void* context);
     bool CManagerAddDriver(CManager, const char*);
+    bool CManagerRemoveDriver(CManager, const char*);
     bool CManagerCancelControllerCommand(CManager, uint32_t const);
     const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
     const char* CManagerGetLibraryVersion(CManager, uint32_t const);
+    int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
     void CManagerSetNodeName(CManager, uint32_t const, uint8_t const, const char*);
     void CManagerSetNodeLocation(CManager, uint32_t const, uint8_t const, const char*);
+    void CManagerWriteConfig(CManager, uint32_t const);
 
     NotificationType CNotificationGetType(CNotification);
     uint32_t CNotificationGetHomeId(CNotification);

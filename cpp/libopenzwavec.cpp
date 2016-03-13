@@ -26,9 +26,19 @@ extern "C"
                 reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
     }
 
+    bool CManagerRemoveWatcher(CManager cManager, pfnOnNotification_t notification, void* context) {
+        return static_cast<OpenZWave::Manager*>(cManager)->RemoveWatcher(
+                reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
+    }
+
     bool CManagerAddDriver(CManager cManager, const char* cControllerPath) {
         std::string controllerPath = cControllerPath;
         return static_cast<OpenZWave::Manager*>(cManager)->AddDriver(controllerPath);
+    }
+
+    bool CManagerRemoveDriver(CManager cManager, const char* cControllerPath) {
+        std::string controllerPath = cControllerPath;
+        return static_cast<OpenZWave::Manager*>(cManager)->RemoveDriver(controllerPath);
     }
 
     bool CManagerCancelControllerCommand(CManager cManager, uint32_t const homeId) {
@@ -43,14 +53,22 @@ extern "C"
         return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryVersion(homeId).c_str();
     }
 
+    int32_t CManagerGetSendQueueCount(CManager cManager, uint32_t const homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetSendQueueCount(homeId);
+    }
+
     void CManagerSetNodeName(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeName) {
         std::string nodeName = cNodeName;
         static_cast<OpenZWave::Manager*>(cManager)->SetNodeName(homeId, nodeId, nodeName);
     }
 
-    void CManagerSetNodeLocation(CManager cManager, uint32_t homeId, uint8_t const nodeId, const char* cNodeLocation) {
+    void CManagerSetNodeLocation(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeLocation) {
         std::string nodeLocation = cNodeLocation;
         static_cast<OpenZWave::Manager*>(cManager)->SetNodeLocation(homeId, nodeId, nodeLocation);
+    }
+
+    void CManagerWriteConfig(CManager cManager, uint32_t const homeId) {
+        static_cast<OpenZWave::Manager*>(cManager)->WriteConfig(homeId);
     }
 
     NotificationType CNotificationGetType(CNotification cNotification) {
