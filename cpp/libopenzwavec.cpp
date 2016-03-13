@@ -31,12 +31,26 @@ extern "C"
         return static_cast<OpenZWave::Manager*>(cManager)->AddDriver(controllerPath);
     }
 
-    const char* CManagerGetLibraryTypeName(CManager cManager, uint32_t homeId) {
+    bool CManagerCancelControllerCommand(CManager cManager, uint32_t const homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->CancelControllerCommand(homeId);
+    }
+
+    const char* CManagerGetLibraryTypeName(CManager cManager, uint32_t const homeId) {
         return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryTypeName(homeId).c_str();
     }
 
-    const char* CManagerGetLibraryVersion(CManager cManager, uint32_t homeId) {
+    const char* CManagerGetLibraryVersion(CManager cManager, uint32_t const homeId) {
         return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryVersion(homeId).c_str();
+    }
+
+    void CManagerSetNodeName(CManager cManager, uint32_t const homeId, uint8_t const nodeId, const char* cNodeName) {
+        std::string nodeName = cNodeName;
+        static_cast<OpenZWave::Manager*>(cManager)->SetNodeName(homeId, nodeId, nodeName);
+    }
+
+    void CManagerSetNodeLocation(CManager cManager, uint32_t homeId, uint8_t const nodeId, const char* cNodeLocation) {
+        std::string nodeLocation = cNodeLocation;
+        static_cast<OpenZWave::Manager*>(cManager)->SetNodeLocation(homeId, nodeId, nodeLocation);
     }
 
     NotificationType CNotificationGetType(CNotification cNotification) {

@@ -20,11 +20,20 @@ class PyManager(object):
     def addDriver(self, controllerPath):
         return lib.CManagerAddDriver(self.manager, controllerPath)
 
+    def cancelControllerCommand(self, homeId):
+        return lib.CManagerCancelControllerCommand(self.manager, homeId)
+
     def getLibraryTypeName(self, homeId):
         return ffi.string(lib.CManagerGetLibraryTypeName(self.manager, homeId))
 
     def getLibraryVersion(self, homeId):
         return ffi.string(lib.CManagerGetLibraryVersion(self.manager, homeId))
+
+    def setNodeName(self, homeId, nodeId, nodeName):
+        lib.CManagerSetNodeName(self.manager, homeId, nodeId, nodeName)
+
+    def setNodeLocation(self, homeId, nodeId, nodeLocation):
+        lib.CManagerSetNodeLocation(self.manager, homeId, nodeId, nodeLocation)
 
 
 @ffi.def_extern()
