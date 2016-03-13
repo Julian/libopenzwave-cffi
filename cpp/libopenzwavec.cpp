@@ -17,9 +17,14 @@ extern "C"
         return reinterpret_cast<void*>(OpenZWave::Manager::Create());
     }
 
-    bool CManagerAddWatcher(CManager cManager, cPfnOnNotification_t cNotification, void* context) {
+    bool CManagerAddWatcher(CManager cManager, void* notification, void* context) {
         return static_cast<OpenZWave::Manager*>(cManager)->AddWatcher(
-                reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(cNotification), context);
+                reinterpret_cast<OpenZWave::Manager::pfnOnNotification_t>(notification), context);
+    }
+
+    bool CManagerAddDriver(CManager cManager, const char* cControllerPath) {
+        std::string controllerPath = cControllerPath;
+        return static_cast<OpenZWave::Manager*>(cManager)->AddDriver(controllerPath);
     }
 
     COptions newCOptions(

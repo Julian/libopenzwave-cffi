@@ -10,7 +10,16 @@ class PyManager(object):
         self._watcherCallbackSavedReference = context
         if not lib.CManagerAddWatcher(
             self.manager,
-            lib.add_manager_callback,
+            lib.manager_watcher_callback,
             context,
         ):
             assert False
+
+    def addDriver(self, controllerPath):
+        return lib.CManagerAddDriver(self.manager, controllerPath)
+
+
+@ffi.def_extern()
+def manager_watcher_callback(context):
+    callback = ffi.from_handle(context)
+    callback()
