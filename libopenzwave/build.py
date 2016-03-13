@@ -3,7 +3,10 @@ from cffi import FFI
 
 ffi = FFI()
 ffi.set_source(
-    "_libopenzwave", '#include "libopenzwavec.h"', libraries=["openzwavec"],
+    "_libopenzwave",
+    '#include "libopenzwavec.h"',
+    libraries=["openzwavec"],
+    source_extension=".cpp",
 )
 ffi.cdef(
     """
@@ -12,7 +15,7 @@ ffi.cdef(
     typedef void* COptions;
 
     typedef void* pfnOnNotification_t;
-    typedef void* NotificationType;
+    typedef int... NotificationType;
 
     CManager newCManager(void);
     void destroyCManager(CManager);

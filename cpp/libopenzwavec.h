@@ -1,32 +1,26 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifdef __cplusplus
 #include "openzwave/Manager.h"
 #include "openzwave/Notification.h"
 
 extern "C" {
-#endif
     typedef void* CManager;
     typedef void* CNotification;
     typedef void* COptions;
 
-    /* XXX: I can't figure out if I can access this from C and not need void* ?
-     * */
-#ifdef __cplusplus
-    typedef OpenZWave::Manager::pfnOnNotification_t pfnOnNotification_t;
-    typedef OpenZWave::Notification::NotificationType NotificationType;
-#else
     typedef void* pfnOnNotification_t;
-    typedef void* NotificationType;
-#endif
+    typedef OpenZWave::Notification::NotificationType NotificationType;
 
     CManager newCManager(void);
     void destroyCManager(CManager);
     bool CManagerAddWatcher(CManager, pfnOnNotification_t, void* context);
     bool CManagerAddDriver(CManager, const char*);
-    const char* CManagerGetLibraryTypeName(CManager, uint32_t);
-    const char* CManagerGetLibraryVersion(CManager, uint32_t);
+    bool CManagerCancelControllerCommand(CManager, uint32_t const);
+    const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
+    const char* CManagerGetLibraryVersion(CManager, uint32_t const);
+    void CManagerSetNodeName(CManager, uint32_t const, uint8_t const, const char*);
+    void CManagerSetNodeLocation(CManager, uint32_t const, uint8_t const, const char*);
 
     NotificationType CNotificationGetType(CNotification);
     uint32_t CNotificationGetHomeId(CNotification);
@@ -39,6 +33,4 @@ extern "C" {
     bool COptionsAddInt(COptions, const char*, int32_t);
     bool COptionsLock(COptions);
     bool COptionsAreLocked(COptions);
-#ifdef __cplusplus
 }
-#endif
