@@ -20,6 +20,12 @@ class PyManager(object):
     def addDriver(self, controllerPath):
         return lib.CManagerAddDriver(self.manager, controllerPath)
 
+    def getLibraryTypeName(self, homeId):
+        return ffi.string(lib.CManagerGetLibraryTypeName(self.manager, homeId))
+
+    def getLibraryVersion(self, homeId):
+        return ffi.string(lib.CManagerGetLibraryVersion(self.manager, homeId))
+
 
 @ffi.def_extern()
 def do_manager_watcher_callback(cNotification, context):

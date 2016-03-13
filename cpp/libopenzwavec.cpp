@@ -31,6 +31,14 @@ extern "C"
         return static_cast<OpenZWave::Manager*>(cManager)->AddDriver(controllerPath);
     }
 
+    const char* CManagerGetLibraryTypeName(CManager cManager, uint32_t homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryTypeName(homeId).c_str();
+    }
+
+    const char* CManagerGetLibraryVersion(CManager cManager, uint32_t homeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetLibraryVersion(homeId).c_str();
+    }
+
     NotificationType CNotificationGetType(CNotification cNotification) {
         return static_cast<OpenZWave::Notification*>(cNotification)->GetType();
     }

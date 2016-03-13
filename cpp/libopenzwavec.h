@@ -25,6 +25,8 @@ extern "C" {
     void destroyCManager(CManager);
     bool CManagerAddWatcher(CManager, pfnOnNotification_t, void* context);
     bool CManagerAddDriver(CManager, const char*);
+    const char* CManagerGetLibraryTypeName(CManager, uint32_t);
+    const char* CManagerGetLibraryVersion(CManager, uint32_t);
 
     NotificationType CNotificationGetType(CNotification);
     uint32_t CNotificationGetHomeId(CNotification);
