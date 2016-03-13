@@ -20,6 +20,6 @@ class PyManager(object):
 
 
 @ffi.def_extern()
-def manager_watcher_callback(context):
+def manager_watcher_callback(notification, context, _):
     callback = ffi.from_handle(context)
-    callback()
+    callback(notification)
