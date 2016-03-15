@@ -8,6 +8,10 @@ class PyManager(object):
 
     COMMAND_CLASS_DESC = COMMAND_CLASS_DESC
 
+    @classmethod
+    def getOzwLibraryVersion(cls):
+        return ffi.string(lib.CManagerGetVersionAsString())
+
     def create(self):
         self.manager = ffi.gc(lib.newCManager(), lib.destroyCManager)
 
@@ -34,39 +38,6 @@ class PyManager(object):
         finally:
             self._watcherCallbackSavedReference = None
 
-    def isBridgeController(self, homeId):
-        return lib.CManagerIsBridgeController(self.manager, homeId)
-
-    def isNodeFrequentListeningDevice(self, homeId, nodeId):
-        return lib.CManagerIsNodeFrequentListeningDevice(self.manager, homeId, nodeId)
-
-    def isNodeBeamingDevice(self, homeId, nodeId):
-        return lib.CManagerIsNodeBeamingDevice(self.manager, homeId, nodeId)
-
-    def isNodeListeningDevice(self, homeId, nodeId):
-        return lib.CManagerIsNodeListeningDevice(self.manager, homeId, nodeId)
-
-    def isNodeRoutingDevice(self, homeId, nodeId):
-        return lib.CManagerIsNodeRoutingDevice(self.manager, homeId, nodeId)
-
-    def isNodeSecurityDevice(self, homeId, nodeId):
-        return lib.CManagerIsNodeSecurityDevice(self.manager, homeId, nodeId)
-
-    def isPrimaryController(self, homeId):
-        return lib.CManagerIsPrimaryController(self.manager, homeId)
-
-    def isStaticUpdateController(self, homeId):
-        return lib.CManagerIsStaticUpdateController(self.manager, homeId)
-
-    def addDriver(self, controllerPath):
-        return lib.CManagerAddDriver(self.manager, controllerPath)
-
-    def removeDriver(self, controllerPath):
-        return lib.CManagerRemoveDriver(self.manager, controllerPath)
-
-    def cancelControllerCommand(self, homeId):
-        return lib.CManagerCancelControllerCommand(self.manager, homeId)
-
     def getDriverStatistics(self, homeId):
         data = ffi.new("DriverData *")
         statistics = lib.CManagerGetDriverStatistics(
@@ -74,25 +45,12 @@ class PyManager(object):
         )
         return statistics
 
-    def getLibraryTypeName(self, homeId):
-        return ffi.string(lib.CManagerGetLibraryTypeName(self.manager, homeId))
-
-    def getLibraryVersion(self, homeId):
-        return ffi.string(lib.CManagerGetLibraryVersion(self.manager, homeId))
-
     def getPythonLibraryVersion(self):
         version = self.getPythonLibraryVersionNumber()
         return "python-openzwave+cffi v%s" % (version,)
 
     def getPythonLibraryVersionNumber(self):
         return __version__
-
-    @classmethod
-    def getOzwLibraryVersion(cls):
-        return ffi.string(lib.CManagerGetVersionAsString())
-
-    def getSendQueueCount(self, homeId):
-        return lib.CManagerGetSendQueueCount(self.manager, homeId)
 
     def getNodeClassInformation(self, homeId, nodeId, commandClassId):
         className, classVersion = ffi.new("char **"), ffi.new("uint8_t *")
@@ -105,35 +63,6 @@ class PyManager(object):
             classVersion,
         )
 
-    def getNodeLocation(self, homeId, nodeId):
-        return lib.CManagerSetNodeLocation(self.manager, homeId, nodeId)
-
-    def setNodeLocation(self, homeId, nodeId, nodeLocation):
-        lib.CManagerSetNodeLocation(self.manager, homeId, nodeId, nodeLocation)
-
-    def getNodeManufacturerId(self, homeId, nodeId):
-        return ffi.string(
-            lib.CManagerGetNodeManufacturerId(self.manager, homeId, nodeId),
-        )
-
-    def getNodeManufacturerName(self, homeId, nodeId):
-        return ffi.string(
-            lib.CManagerGetNodeManufacturerName(self.manager, homeId, nodeId),
-        )
-
-    def setNodeManufacturerName(self, homeId, nodeId, nodeManufacturerName):
-        lib.CManagerSetNodeManufacturerName(
-            self.manager, homeId, nodeId, nodeManufacturerName,
-        )
-
-    def getNodeName(self, homeId, nodeId):
-        return ffi.string(
-            lib.CManagerGetNodeName(self.manager, homeId, nodeId),
-        )
-
-    def setNodeName(self, homeId, nodeId, nodeName):
-        lib.CManagerSetNodeName(self.manager, homeId, nodeId, nodeName)
-
     def getNodeNeighbors(self, homeId, nodeId):
         neighbors = ffi.new("uint8_t*[29]")
         count = lib.CManagerGetNodeNeighbors(
@@ -141,34 +70,51 @@ class PyManager(object):
         )
         return list(neighbors[0][0:count])
 
-    def getNodeProductId(self, homeId, nodeId):
-        return ffi.string(
-            lib.CManagerGetNodeProductId(self.manager, homeId, nodeId),
-        )
 
-    def getNodeProductName(self, homeId, nodeId):
-        return ffi.string(
-            lib.CManagerGetNodeProductName(self.manager, homeId, nodeId),
-        )
+def _bind(return_type, name):
+    wrapped = getattr(lib, "CManager" + name[0].upper() + name[1:])
 
-    def setNodeProductName(self, homeId, nodeId, nodeProductName):
-        lib.CManagerSetNodeProductName(
-            self.manager, homeId, nodeId, nodeProductName,
-        )
+    if return_type is None:
+        def boundManagerFunction(self, *args):
+            wrapped(self.manager, *args)
+    else:
+        def boundManagerFunction(self, *args):
+            return return_type(wrapped(self.manager, *args))
 
-    def getNodeProductType(self, homeType, nodeType):
-        return ffi.string(
-            lib.CManagerGetNodeProductType(self.manager, homeType, nodeType),
-        )
+    boundManagerFunction.__name__ = name
+    return boundManagerFunction
 
-    def getNodeVersion(self, homeId, nodeId):
-        return int(lib.CManagerGetNodeVersion(self.manager, homeId, nodeId))
 
-    def getNumGroups(self, homeId, nodeId):
-        return lib.CManagerGetNumGroups(self.manager, homeId, nodeId)
-
-    def writeConfig(self, homeId):
-        lib.CManagerWriteConfig(self.manager, homeId)
+for name, return_type, setter in [
+    ("isBridgeController", bool, False),
+    ("isNodeFrequentListeningDevice", bool, False),
+    ("isNodeBeamingDevice", bool, False),
+    ("isNodeListeningDevice", bool, False),
+    ("isNodeRoutingDevice", bool, False),
+    ("isNodeSecurityDevice", bool, False),
+    ("isPrimaryController", bool, False),
+    ("isStaticUpdateController", bool, False),
+    ("addDriver", bool, False),
+    ("removeDriver", bool, False),
+    ("cancelControllerCommand", bool, False),
+    ("getLibraryTypeName", ffi.string, False),
+    ("getLibraryVersion", ffi.string, False),
+    ("getNodeManufacturerId", ffi.string, False),
+    ("getNodeManufacturerName", ffi.string, True),
+    ("getNodeLocation", ffi.string, True),
+    ("getNodeName", ffi.string, True),
+    ("getNodeProductId", ffi.string, False),
+    ("getNodeProductName", ffi.string, True),
+    ("getNodeProductType", ffi.string, False),
+    ("getNodeVersion", int, False),
+    ("getNumGroups", int, False),
+    ("getSendQueueCount", int, False),
+    ("writeConfig", None, False),
+]:
+    setattr(PyManager, name, _bind(name=name, return_type=return_type))
+    if setter:
+        name = name.replace("get", "set")
+        setattr(PyManager, name, _bind(return_type=None, name=name))
 
 
 @ffi.def_extern()
