@@ -139,6 +139,10 @@ extern "C"
         static_cast<OpenZWave::Manager*>(cManager)->SetNodeProductName(homeId, nodeId, nodeProductName);
     }
 
+    uint32_t CManagerGetNodeNeighbors(CManager cManager, uint32_t const homeId, uint8_t const nodeId, uint8_t** nodeNeighbors) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNodeNeighbors(homeId, nodeId, nodeNeighbors);
+    }
+
     const char* CManagerGetNodeProductType(CManager cManager, uint32_t const homeId, uint8_t const nodeId) {
         return static_cast<OpenZWave::Manager*>(cManager)->GetNodeProductType(homeId, nodeId).c_str();
     }

@@ -134,6 +134,13 @@ class PyManager(object):
     def setNodeName(self, homeId, nodeId, nodeName):
         lib.CManagerSetNodeName(self.manager, homeId, nodeId, nodeName)
 
+    def getNodeNeighbors(self, homeId, nodeId):
+        neighbors = ffi.new("uint8_t*[29]")
+        count = lib.CManagerGetNodeNeighbors(
+            self.manager, homeId, nodeId, neighbors,
+        )
+        return list(neighbors[0][0:count])
+
     def getNodeProductId(self, homeId, nodeId):
         return ffi.string(
             lib.CManagerGetNodeProductId(self.manager, homeId, nodeId),

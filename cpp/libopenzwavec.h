@@ -49,6 +49,7 @@ extern "C" {
     const char* CManagerGetNodeManufacturerName(CManager, uint32_t const, uint8_t const);
     void CManagerSetNodeManufacturerName(CManager, uint32_t const, uint8_t const, const char*);
 
+    uint32_t CManagerGetNodeNeighbors(CManager, uint32_t const, uint8_t const, uint8_t**);
     const char* CManagerGetNodeProductId(CManager, uint32_t const, uint8_t const);
     const char* CManagerGetNodeProductType(CManager, uint32_t const, uint8_t const);
     bool CManagerGetNodeClassInformation(CManager, uint32_t const, uint8_t const, uint8_t const, const char **, uint8_t *);
