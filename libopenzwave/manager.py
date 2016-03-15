@@ -1,10 +1,13 @@
 from _libopenzwave import ffi, lib
 
 from libopenzwave import __version__
-from libopenzwave._global import PyNotifications
+from libopenzwave._global import COMMAND_CLASS_DESC, PyNotifications
 
 
 class PyManager(object):
+
+    COMMAND_CLASS_DESC = COMMAND_CLASS_DESC
+
     def create(self):
         self.manager = ffi.gc(lib.newCManager(), lib.destroyCManager)
 
@@ -65,8 +68,10 @@ class PyManager(object):
         return lib.CManagerCancelControllerCommand(self.manager, homeId)
 
     def getDriverStatistics(self, homeId):
-        data = ffi.new("struct DriverData*")
-        statistics = lib.CManagerGetDriverStatistics(homeId, data)
+        data = ffi.new("DriverData *")
+        statistics = lib.CManagerGetDriverStatistics(
+            self.manager, homeId, data,
+        )
         return statistics
 
     def getLibraryTypeName(self, homeId):
@@ -74,9 +79,6 @@ class PyManager(object):
 
     def getLibraryVersion(self, homeId):
         return ffi.string(lib.CManagerGetLibraryVersion(self.manager, homeId))
-
-    def getNodeVersion(self, homeId, nodeId):
-        return int(lib.CManagerGetNodeVersion(self.manager, homeId, nodeId))
 
     def getPythonLibraryVersion(self):
         version = self.getPythonLibraryVersionNumber()
@@ -92,6 +94,38 @@ class PyManager(object):
     def getSendQueueCount(self, homeId):
         return lib.CManagerGetSendQueueCount(self.manager, homeId)
 
+    def getNodeClassInformation(self, homeId, nodeId, commandClassId):
+        className, classVersion = ffi.new("char **"), ffi.new("uint8_t *")
+        return lib.CManagerGetNodeClassInformation(
+            self.manager,
+            homeId,
+            nodeId,
+            commandClassId,
+            className,
+            classVersion,
+        )
+
+    def getNodeLocation(self, homeId, nodeId):
+        return lib.CManagerSetNodeLocation(self.manager, homeId, nodeId)
+
+    def setNodeLocation(self, homeId, nodeId, nodeLocation):
+        lib.CManagerSetNodeLocation(self.manager, homeId, nodeId, nodeLocation)
+
+    def getNodeManufacturerId(self, homeId, nodeId):
+        return ffi.string(
+            lib.CManagerGetNodeManufacturerId(self.manager, homeId, nodeId),
+        )
+
+    def getNodeManufacturerName(self, homeId, nodeId):
+        return ffi.string(
+            lib.CManagerGetNodeManufacturerName(self.manager, homeId, nodeId),
+        )
+
+    def setNodeManufacturerName(self, homeId, nodeId, nodeManufacturerName):
+        lib.CManagerSetNodeManufacturerName(
+            self.manager, homeId, nodeId, nodeManufacturerName,
+        )
+
     def getNodeName(self, homeId, nodeId):
         return ffi.string(
             lib.CManagerGetNodeName(self.manager, homeId, nodeId),
@@ -100,11 +134,10 @@ class PyManager(object):
     def setNodeName(self, homeId, nodeId, nodeName):
         lib.CManagerSetNodeName(self.manager, homeId, nodeId, nodeName)
 
-    def getNodeLocation(self, homeId, nodeId):
-        return lib.CManagerSetNodeLocation(self.manager, homeId, nodeId)
-
-    def setNodeLocation(self, homeId, nodeId, nodeLocation):
-        lib.CManagerSetNodeLocation(self.manager, homeId, nodeId, nodeLocation)
+    def getNodeProductId(self, homeId, nodeId):
+        return ffi.string(
+            lib.CManagerGetNodeProductId(self.manager, homeId, nodeId),
+        )
 
     def getNodeProductName(self, homeId, nodeId):
         return ffi.string(
@@ -115,6 +148,14 @@ class PyManager(object):
         lib.CManagerSetNodeProductName(
             self.manager, homeId, nodeId, nodeProductName,
         )
+
+    def getNodeProductType(self, homeType, nodeType):
+        return ffi.string(
+            lib.CManagerGetNodeProductType(self.manager, homeType, nodeType),
+        )
+
+    def getNodeVersion(self, homeId, nodeId):
+        return int(lib.CManagerGetNodeVersion(self.manager, homeId, nodeId))
 
     def writeConfig(self, homeId):
         lib.CManagerWriteConfig(self.manager, homeId)

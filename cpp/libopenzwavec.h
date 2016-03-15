@@ -18,6 +18,9 @@ extern "C" {
     void destroyCManager(CManager);
 
     const char* CManagerGetVersionAsString(void);
+    const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
+    const char* CManagerGetLibraryVersion(CManager, uint32_t const);
+    uint8_t CManagerGetNodeVersion(CManager, uint32_t const, uint8_t);
 
     bool CManagerIsBridgeController(CManager, uint32_t);
     bool CManagerIsNodeBeamingDevice(CManager, uint32_t const, uint8_t);
@@ -35,19 +38,27 @@ extern "C" {
     bool CManagerAddDriver(CManager, const char*);
     bool CManagerRemoveDriver(CManager, const char*);
 
-    const char* CManagerGetLibraryTypeName(CManager, uint32_t const);
-    const char* CManagerGetLibraryVersion(CManager, uint32_t const);
-    uint8_t CManagerGetNodeVersion(CManager, uint32_t const, uint8_t);
-    int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
-
     const char* CManagerGetNodeName(CManager, uint32_t const, uint8_t const);
     void CManagerSetNodeName(CManager, uint32_t const, uint8_t const, const char*);
 
     const char* CManagerGetNodeLocation(CManager, uint32_t const, uint8_t const);
     void CManagerSetNodeLocation(CManager, uint32_t const, uint8_t const, const char*);
 
+    const char* CManagerGetNodeManufacturerId(CManager, uint32_t const, uint8_t const);
+
+    const char* CManagerGetNodeManufacturerName(CManager, uint32_t const, uint8_t const);
+    void CManagerSetNodeManufacturerName(CManager, uint32_t const, uint8_t const, const char*);
+
+    const char* CManagerGetNodeProductId(CManager, uint32_t const, uint8_t const);
+    const char* CManagerGetNodeProductType(CManager, uint32_t const, uint8_t const);
+    bool CManagerGetNodeClassInformation(CManager, uint32_t const, uint8_t const, uint8_t const, const char **, uint8_t *);
+
     const char* CManagerGetNodeProductName(CManager, uint32_t const, uint8_t const);
     void CManagerSetNodeProductName(CManager, uint32_t const, uint8_t const, const char*);
+
+
+    void CManagerGetDriverStatistics(CManager, uint32_t const, DriverData*);
+    int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
 
     void CManagerWriteConfig(CManager, uint32_t const);
 
