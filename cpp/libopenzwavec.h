@@ -59,6 +59,7 @@ extern "C" {
 
 
     void CManagerGetDriverStatistics(CManager, uint32_t const, DriverData*);
+    uint8_t CManagerGetNumGroups(CManager, uint32_t const, uint8_t const);
     int32_t CManagerGetSendQueueCount(CManager, uint32_t const);
 
     void CManagerWriteConfig(CManager, uint32_t const);

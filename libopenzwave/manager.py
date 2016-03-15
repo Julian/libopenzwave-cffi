@@ -164,6 +164,9 @@ class PyManager(object):
     def getNodeVersion(self, homeId, nodeId):
         return int(lib.CManagerGetNodeVersion(self.manager, homeId, nodeId))
 
+    def getNumGroups(self, homeId, nodeId):
+        return lib.CManagerGetNumGroups(self.manager, homeId, nodeId)
+
     def writeConfig(self, homeId):
         lib.CManagerWriteConfig(self.manager, homeId)
 

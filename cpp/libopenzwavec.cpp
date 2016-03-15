@@ -160,6 +160,10 @@ extern "C"
         static_cast<OpenZWave::Manager*>(cManager)->GetDriverStatistics(homeId, data);
     }
 
+    uint8_t CManagerGetNumGroups(CManager cManager, uint32_t const homeId, uint8_t nodeId) {
+        return static_cast<OpenZWave::Manager*>(cManager)->GetNumGroups(homeId, nodeId);
+    }
+
     void CManagerWriteConfig(CManager cManager, uint32_t const homeId) {
         static_cast<OpenZWave::Manager*>(cManager)->WriteConfig(homeId);
     }
